@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cancel Booking</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_green.css">
+
+<style>
+
+*{
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
+body{
+margin:0;
+background:linear-gradient(135deg,#2e7d32,#66bb6a);
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+padding:20px;
+}
+
+.card{
+background:white;
+width:420px;
+padding:30px;
+border-radius:14px;
+box-shadow:0 10px 30px rgba(0,0,0,0.25);
+}
+
+h2{
+text-align:center;
+margin:0;
+color:#2e7d32;
+}
+
+.subtitle{
+text-align:center;
+font-size:14px;
+color:#666;
+margin-bottom:25px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin:8px 0;
+border:1px solid #ccc;
+border-radius:8px;
+font-size:14px;
+transition:0.2s;
+}
+
+input:focus{
+border-color:#2e7d32;
+outline:none;
+box-shadow:0 0 5px rgba(46,125,50,0.3);
+}
+
+.date-row{
+display:flex;
+gap:10px;
+}
+
+.date-field{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
+.date-field label{
+font-size:12px;
+margin-bottom:3px;
+color:#2e7d32;
+font-weight:bold;
+}
+
+button{
+width:100%;
+padding:14px;
+margin-top:15px;
+background:#25D366;
+color:white;
+border:none;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+font-weight:bold;
+transition:0.2s;
+}
+
+button:hover{
+background:#1ebe5d;
+}
+
+.policy{
+margin-top:25px;
+padding:15px;
+background:#f6f6f6;
+border-radius:10px;
+font-size:13px;
+}
+
+.policy h4{
+margin-top:0;
+margin-bottom:10px;
+color:#333;
+text-align:center;
+}
+
+.policy ul{
+padding-left:18px;
+margin:0;
+}
+
+.policy li{
+margin-bottom:6px;
+}
+
+.note{
+margin-top:10px;
+font-size:12px;
+color:#555;
+text-align:center;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Tulsi Homestay</h2>
+<div class="subtitle">Booking Cancellation Request</div>
+
+<input type="text" id="name" placeholder="Guest Name">
+
+<input type="text" id="booking" placeholder="Booking ID">
+
+<input type="email" id="email" placeholder="Gmail Address">
+
+<div class="date-row">
+
+<div class="date-field">
+<label>Check-in</label>
+<input type="text" id="checkin" placeholder="Select Check-in">
+</div>
+
+<div class="date-field">
+<label>Check-out</label>
+<input type="text" id="checkout" placeholder="Select Check-out">
+</div>
+
+</div>
+
+<button onclick="cancelBooking()">Cancel via WhatsApp</button>
+
+<div class="policy">
+
+<h4>Cancellation Policy</h4>
+
+<ul>
+<li>✔ 15+ days before check-in — <b>100% refund</b></li>
+<li>✔ 10–14 days before — <b>50% refund</b></li>
+<li>✖ 9 days or less — <b>No refund</b></li>
+</ul>
+
+<div class="note">
+Refunds (if applicable) will be processed within <b>7+ working days</b>.
+</div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+
+const checkinPicker = flatpickr("#checkin",{
+dateFormat:"Y-m-d",
+minDate:"today",
+disableMobile:true,
+onChange:function(selectedDates){
+let nextDay=new Date(selectedDates[0]);
+nextDay.setDate(nextDay.getDate()+1);
+checkoutPicker.set("minDate",nextDay);
+}
+});
+
+const checkoutPicker = flatpickr("#checkout",{
+dateFormat:"Y-m-d",
+disableMobile:true
+});
+
+function cancelBooking(){
+
+let name=document.getElementById("name").value;
+let booking=document.getElementById("booking").value;
+let email=document.getElementById("email").value;
+let checkin=document.getElementById("checkin").value;
+let checkout=document.getElementById("checkout").value;
+
+if(!name || !booking || !email || !checkin || !checkout){
+alert("Please fill all details");
+return;
+}
+
+if(new Date(checkout) <= new Date(checkin)){
+alert("Check-out date must be after Check-in date");
+return;
+}
+
+let message =
+"*Tulsi Homestay - Cancellation Request*%0A%0A"+
+"Name: "+name+"%0A"+
+"Booking ID: "+booking+"%0A"+
+"Email: "+email+"%0A"+
+"Check-in: "+checkin+"%0A"+
+"Check-out: "+checkout;
+
+let url="https://wa.me/918310743416?text="+message;
+
+window.open(url,"_blank");
+
+}
+
+</script>
+
+</body>
+</html>
